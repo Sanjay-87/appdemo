@@ -90,6 +90,7 @@ const App = () => {
         contentInsetAdjustmentBehavior="automatic"
         style={backgroundStyle}>
         <Header />
+        <Text>code rendering</Text>
         <Button title="Send Events" onPress={() => codePushSync()} />
         {logs.map((log, i) => <Text key={i}>{log}</Text>)}
         {/* <View
