@@ -28,7 +28,8 @@ import {
 
 import codePush from "react-native-code-push";
 
-let codePushOptions = { checkFrequency: codePush.CheckFrequency.MANUAL };
+let codePushOptions = { checkFrequency: codePush.CheckFrequency.ON_APP_START, installMode: codePush.InstallMode.ON_NEXT_RESUME };//Enable Codepush
+// let codePushOptions = { checkFrequency: codePush.CheckFrequency.MANUAL, installMode: codePush.InstallMode.ON_NEXT_RESUME };//Disable Codepush
 
 const Section = ({children, title}): Node => {
   const isDarkMode = useColorScheme() === 'dark';
