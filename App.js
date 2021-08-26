@@ -6,8 +6,8 @@
  * @flow strict-local
  */
 
-import React from 'react';
-import type {Node} from 'react';
+import React, {useState} from 'react';
+import {Node} from 'react';
 import {
   SafeAreaView,
   ScrollView,
@@ -16,6 +16,7 @@ import {
   Text,
   useColorScheme,
   View,
+  Button
 } from 'react-native';
 
 import {
@@ -28,10 +29,11 @@ import {
 
 import codePush from "react-native-code-push";
 
-let codePushOptions = { checkFrequency: codePush.CheckFrequency.ON_APP_START, installMode: codePush.InstallMode.ON_NEXT_RESUME };//Enable Codepush
+// let codePushOptions = { checkFrequency: codePush.CheckFrequency.ON_APP_START, installMode: codePush.InstallMode.ON_NEXT_RESUME };//Enable Codepush
 // let codePushOptions = { checkFrequency: codePush.CheckFrequency.MANUAL, installMode: codePush.InstallMode.ON_NEXT_RESUME };//Disable Codepush
 
-const Section = ({children, title}): Node => {
+const Section = ({children, title}) => {
+
   const isDarkMode = useColorScheme() === 'dark';
   return (
     <View style={styles.sectionContainer}>
@@ -57,12 +59,29 @@ const Section = ({children, title}): Node => {
   );
 };
 
-const App: () => Node = () => {
+const App = () => {
+  const [logs, setLogs] = useState([]);
   const isDarkMode = useColorScheme() === 'dark';
 
   const backgroundStyle = {
     backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
   };
+
+  const codePushSync = () => {
+    setLogs(['Sync started at' + new Date()]);
+
+    codePush.sync({
+      installMode: codePush.InstallMode.IMMEDIATE,
+      updateDialog: true
+    }, (status) => {
+      for (var key in codePush.SyncStatus) {
+        if (status === codePush.SyncStatus[key]) {
+          setLogs([...logs, key.replace(/_/g, '')]);
+          break;
+        }
+      }
+    })
+  }
 
   return (
     <SafeAreaView style={backgroundStyle}>
@@ -71,7 +90,9 @@ const App: () => Node = () => {
         contentInsetAdjustmentBehavior="automatic"
         style={backgroundStyle}>
         <Header />
-        <View
+        <Button title="Send Events" onPress={() => codePushSync()} />
+        {logs.map((log, i) => <Text key={i}>{log}</Text>)}
+        {/* <View
           style={{
             backgroundColor: isDarkMode ? Colors.black : Colors.white,
           }}>
@@ -89,7 +110,7 @@ const App: () => Node = () => {
             Read the docs to discover what to do next:
           </Section>
           <LearnMoreLinks />
-        </View>
+        </View> */}
       </ScrollView>
     </SafeAreaView>
   );
@@ -114,4 +135,5 @@ const styles = StyleSheet.create({
   },
 });
 
-export default codePush(codePushOptions)(App);
+// export default codePush(codePushOptions)(App);
+export default App;
