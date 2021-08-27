@@ -90,8 +90,8 @@ const App = () => {
         contentInsetAdjustmentBehavior="automatic"
         style={backgroundStyle}>
         <Header />
-        <Text>code rendering</Text>
-        <Button title="Send Events" onPress={() => codePushSync()} />
+        <Text style={styles.sectionTitle}>code rendering</Text>
+        <Button title="Check updates" onPress={() => codePushSync()} />
         {logs.map((log, i) => <Text key={i}>{log}</Text>)}
         {/* <View
           style={{
